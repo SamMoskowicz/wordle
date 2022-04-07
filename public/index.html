@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/public/bundle.js" defer></script>
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Wordle</title>
+  </head>
+  <body>
+    <nav>
+      <div id="options-button" class="options-icon"><img src="/public/images/external-options-ui-dreamstale-lineal-dreamstale.png" alt=""></span></div>
+      <div id="game-title">WORDLE</div>
+      <div id="hard-mode-button-container">
+        <span>Hard</span>
+        <label class="switch">
+          <input type="checkbox" id="hard-mode-button" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </nav>
+    <!-- <div id="mode-containder">
+      <select name="mode" id="game-mode">
+        <option value="random">Random Wordle</option>
+        <option value="today">Today's Wordle</option>
+        <option value="interactive">Interactive Wordle</option>
+      </select>
+    </div> -->
+    <div id="outer-container">
+      <div class="side-container">
+        <button id="hint-button">Show Best Word</button>
+        <div id="best-word-container"></div>
+      </div>
+      <div id="game-container">
+        <div id="board">
+          <div id="board-row">
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+          </div>
+          <div id="board-row">
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+          </div>
+          <div id="board-row">
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+          </div>
+          <div id="board-row">
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+          </div>
+          <div id="board-row">
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+          </div>
+          <div id="board-row">
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+            <div id="board-cell" class="ligh-black"></div>
+          </div>
+        </div>
+        <div id="keyboard-container">
+          <div id="keyboard"></div>
+        </div>
+      </div>
+      <div class="side-container">
+        <div id="remaining-words"></div>
+        <button id="remaining-words-button">Show Some Of Them</button>
+        <div id="remaining-words-list"></div>
+      </div>
+    </div>
+  </body>
+</html>
