@@ -18191,6 +18191,14 @@ function unpauseGame() {
 let gameOptionsIsShown = false
 
 function showGameOptions() {
+  const blackElement = document.createElement("div")
+  blackElement.style.width = "100vw"
+  blackElement.style.height = "100vh"
+  blackElement.style.position = "fixed"
+  blackElement.style.top = "0px"
+  blackElement.style.left = "0px"
+  blackElement.style.backgroundColor = "rgba(0, 0, 0, .7)"
+  document.body.append(blackElement)
   gameOptionsIsShown = true
   pauseGame()
   const gameOptions = document.createElement("div")
@@ -18259,6 +18267,7 @@ function showGameOptions() {
     document.body.removeChild(gameOptions)
     unpauseGame()
     gameOptionsIsShown = false
+    document.body.removeChild(blackElement)
   }
   function onPlay() {
     playButton.removeEventListener("click", onPlay)
@@ -18273,6 +18282,7 @@ function showGameOptions() {
     else startGame("date", new Date(dateSelectorDate.getTime() + 100000000))
     unpauseGame()
     gameOptionsIsShown = false
+    document.body.removeChild(blackElement)
   }
 
   playButton.addEventListener("click", onPlay)
