@@ -18038,6 +18038,7 @@ function processInput(input) {
       toastMessage("CONGRATULATIONS! YOU GUESSED THE WORD!", 1000000000)
       endGame()
       showGameOptions()
+      return
     }
     history.push([hiddenLen, allowedLen, guessWord])
     const colors = convertNumToColors(colorsCode)
@@ -18167,6 +18168,8 @@ function startGame(mode, date) {
   }
   guesses = 0
   letterColors.fill("gray")
+  bestWordContainer.innerHTML = ""
+  remainingWordsList.innerHTML = ""
   // let difficulty = "easy"
   currCol = 0
   currWord.length = 0

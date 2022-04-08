@@ -473,6 +473,8 @@ function startGame(mode, date) {
   }
   guesses = 0
   letterColors.fill("gray")
+  bestWordContainer.innerHTML = ""
+  remainingWordsList.innerHTML = ""
   // let difficulty = "easy"
   currCol = 0
   currWord.length = 0
