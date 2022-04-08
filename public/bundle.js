@@ -17997,7 +17997,6 @@ let isPlaying = false
 let isPaused = false
 const currWord = []
 const history = []
-let historyIndex = -1
 let allowedLen = remainingAllowed.length
 let hiddenLen = remainingHidden.length
 let secretWord
@@ -18032,6 +18031,10 @@ function processInput(input) {
     const guessWord = currWord.join("").toLowerCase()
     const colorsCode = matchWords(guessWord, secretWord)
     if (colorsCode === 121) {
+      for (let i = history.length - 1; i > 0; i--) {
+        undoUpdate(history[i][0], history[i - 1][0], remainingHidden)
+        undoUpdate(history[i][1], history[i - 1][1], remainingAllowed)
+      }
       toastMessage("CONGRATULATIONS! YOU GUESSED THE WORD!", 1000000000)
       endGame()
       showGameOptions()
@@ -18065,6 +18068,10 @@ function processInput(input) {
     currWord.length = 0
     currCol = 0
     if (guesses === 6) {
+      for (let i = history.length - 1; i > 0; i--) {
+        undoUpdate(history[i][0], history[i - 1][0], remainingHidden)
+        undoUpdate(history[i][1], history[i - 1][1], remainingAllowed)
+      }
       toastMessage(secretWord, 1000000000)
       endGame()
       showGameOptions()
