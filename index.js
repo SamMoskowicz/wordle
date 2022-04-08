@@ -184,13 +184,13 @@ function swap(i, j, arr) {
 }
 
 function updateWords(len, word, colorsCode, words, updatingAllowed, hard) {
-  console.log("updating word:", word)
-  console.log("word colorsCode:", colorsCode)
+  // console.log("updating word:", word)
+  // console.log("word colorsCode:", colorsCode)
   let newLen = 0
   for (let i = 0; i < len; i++) {
     const currCode = matchWords(word, words[i])
     if (words[i] === "midst") {
-      console.log("match words ", word, words[i] + ":", colorsCode)
+      // console.log("match words ", word, words[i] + ":", colorsCode)
     }
     if (currCode === colorsCode) swap(i, newLen++, words)
   }
@@ -321,7 +321,7 @@ function processInput(input) {
   if (input === "ENTER") {
     if (currCol < 5) return
     if (!containsWord(currWord.join(""), allowedWords)) {
-      console.log("not in word list")
+      // console.log("not in word list")
       toastMessage("NOT IN WORD LIST", 1500)
       return
     }
@@ -329,7 +329,7 @@ function processInput(input) {
       difficulty === "hard" &&
       !containsWord(currWord.join(""), remainingAllowed, 0, allowedLen - 1)
     ) {
-      console.log("word not allowed in hard mode")
+      // console.log("word not allowed in hard mode")
       toastMessage("WORD DOES NOT MATCH PREVIOUS INPUT", 2500)
       return
     }
@@ -343,7 +343,6 @@ function processInput(input) {
       toastMessage("CONGRATULATIONS! YOU GUESSED THE WORD!", 1000000000)
       endGame()
       showGameOptions()
-      return
     }
     history.push([hiddenLen, allowedLen, guessWord])
     const colors = convertNumToColors(colorsCode)
@@ -354,8 +353,8 @@ function processInput(input) {
       colorsCode,
       remainingAllowed
     )
-    console.log("remainig hidden words:", hiddenLen)
-    console.log("remainig allowed words:", allowedLen)
+    // console.log("remainig hidden words:", hiddenLen)
+    // console.log("remainig allowed words:", allowedLen)
     remainingWords.innerText = "Remainig Words that match: " + hiddenLen
     remainingWordsList.innerHTML = ""
     bestWordContainer.innerHTML = ""
@@ -427,11 +426,11 @@ function showLoader(el) {
 
 function showBestWord() {
   if (isPaused) return
-  console.log("game container tab index:", gameContainer.tabIndex)
+  // console.log("game container tab index:", gameContainer.tabIndex)
   // gameContainer.tabIndex = -1
   gameContainer.focus()
   // gameContainer.tabIndex = -1
-  console.log("loading:", loading)
+  // console.log("loading:", loading)
   if (loading) return
   if (bestWordContainer.innerHTML.length) return
   const loader = showLoader(bestWordContainer)
@@ -439,7 +438,12 @@ function showBestWord() {
     const bestWord =
       guesses === 0
         ? "raise"
-        : estimateBest(allowedLen, remainingAllowed, hiddenLen, remainingHidden)
+        : estimateBest(
+            difficulty === "hard" ? allowedLen : remainingAllowed.length,
+            remainingAllowed,
+            hiddenLen,
+            remainingHidden
+          )
     bestWordContainer.innerText =
       "The estimated best word is: " + bestWord.toUpperCase()
     loading = false
@@ -456,10 +460,10 @@ function endGame() {
 }
 
 function startGame(mode, date) {
-  console.log("stargin game...")
-  console.log("is playing:", isPlaying)
+  // console.log("stargin game...")
+  // console.log("is playing:", isPlaying)
   if (isPlaying) return
-  console.log("continuing game...")
+  // console.log("continuing game...")
   isPlaying = true
   removeToast()
   for (const el of letterToElement) el.className = "keyboard-button gray"
@@ -566,8 +570,8 @@ function showGameOptions() {
   gameOptions.append(playButton)
 
   function onCheckbox(e) {
-    console.log("e:", e.target)
-    console.log(e.target.className)
+    // console.log("e:", e.target)
+    // console.log(e.target.className)
     if (!e.target.classList.contains("game-option-checkbox")) return
     dateGame.checked = false
     randomGame.checked = false
@@ -575,7 +579,7 @@ function showGameOptions() {
   }
 
   function onCancel() {
-    console.log("canceling")
+    // console.log("canceling")
     playButton.removeEventListener("click", onPlay)
     cancelButton.removeEventListener("click", onCancel)
     gameOptions.removeEventListener("click", onCheckbox)
@@ -589,9 +593,9 @@ function showGameOptions() {
     cancelButton.removeEventListener("click", onCancel)
     gameOptions.removeEventListener("click", onCheckbox)
     document.body.removeChild(gameOptions)
-    console.log("date selector date:", dateSelector.value)
+    // console.log("date selector date:", dateSelector.value)
     const dateSelectorDate = new Date(dateSelector.value)
-    console.log(dateSelectorDate.getTime())
+    // console.log(dateSelectorDate.getTime())
     endGame()
     if (randomGame.checked) startGame("random", 0)
     else startGame("date", new Date(dateSelectorDate.getTime() + 100000000))
@@ -609,7 +613,7 @@ function showGameOptions() {
 hardModeButton.addEventListener("change", (e) => {
   if (e.target.checked) difficulty = "hard"
   else difficulty = "easy"
-  console.log("difficulty:", difficulty)
+  // console.log("difficulty:", difficulty)
 })
 
 optionsButton.addEventListener("click", () => {

@@ -169,7 +169,10 @@ function updateWords(len, word, colorsCode, words, updatingAllowed, hard) {
   let newLen = 0
   for (let i = 0; i < len; i++) {
     const currCode = matchWords(word, words[i])
-    if ((hard && currCode === colorsCode) || hasNewInfo(word, colorsCode))
+    if (
+      ((updatingAllowed || hard) && currCode === colorsCode) ||
+      (updatingAllowed && hasNewInfo(word, colorsCode))
+    )
       swap(i, newLen++, words)
   }
   return newLen
@@ -245,14 +248,14 @@ function simulateGame(secretWord, hardMode, remainingAllowed, remainingHidden) {
       remainingAllowed,
       true
     )
-    console.log(
-      "curr guess:",
-      currGuess,
-      "guesses:",
-      guesses,
-      "hiddenLen:",
-      hiddenLen
-    )
+    // console.log(
+    //   "curr guess:",
+    //   currGuess,
+    //   "guesses:",
+    //   guesses,
+    //   "hiddenLen:",
+    //   hiddenLen
+    // )
   }
   for (let i = history.length - 1; i > 0; i--) {
     undoUpdate(history[i][1], history[i - 1][1], remainingHidden)
@@ -269,8 +272,8 @@ function isSorted(arr) {
 function simulateRandomGames(n) {
   const stats = new Array(20).fill(0)
   while (n--) {
-    if (!isSorted(remainingHidden)) console.log("hidden words is not sorted")
-    if (!isSorted(remainingAllowed)) console.log("allowed words is not sorted")
+    // if (!isSorted(remainingHidden)) console.log("hidden words is not sorted")
+    // if (!isSorted(remainingAllowed)) console.log("allowed words is not sorted")
     const secretWord = remainingHidden[randInt(0, remainingHidden.length - 1)]
     const totalGuesses = simulateGame(
       secretWord,
@@ -278,7 +281,7 @@ function simulateRandomGames(n) {
       remainingAllowed,
       remainingHidden
     )
-    console.log("secret word:", secretWord, "total guesses:", totalGuesses)
+    // console.log("secret word:", secretWord, "total guesses:", totalGuesses)
     stats[totalGuesses]++
   }
   return stats
@@ -295,7 +298,7 @@ function simulateAllWords(n = 1) {
         remainingAllowed,
         remainingHidden
       )
-      console.log("secret word:", secretWord, "total guesses", totalGuesses)
+      // console.log("secret word:", secretWord, "total guesses", totalGuesses)
       stats[totalGuesses]++
     }
   }
@@ -304,7 +307,7 @@ function simulateAllWords(n = 1) {
 
 const stats = simulateAllWords()
 
-console.log("stats:", stats)
+// console.log("stats:", stats)
 
 function calculateAverage(stats) {
   let sum = 0,
@@ -318,4 +321,4 @@ function calculateAverage(stats) {
   return sum / total
 }
 
-console.log("average:", calculateAverage(stats))
+// console.log("average:", calculateAverage(stats))
