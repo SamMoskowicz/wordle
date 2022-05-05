@@ -372,6 +372,7 @@ function processInput(input) {
     guesses++
     currWord.length = 0
     currCol = 0
+    if (colorsCode === 121) return
     if (guesses === 6) {
       for (let i = history.length - 1; i > 0; i--) {
         undoUpdate(history[i][0], history[i - 1][0], remainingHidden)
@@ -560,7 +561,9 @@ function showGameOptions() {
   const dateSelector = document.createElement("input")
   dateSelector.type = "date"
   dateSelector.setAttribute("required", true)
-  dateSelector.value = new Date(Date.now()).toJSON().slice(0, 10)
+  const date = new Date(Date.now())
+  date.setTime(date.getTime() - date.getTimezoneOffset() * 60 * 1000)
+  dateSelector.value = date.toJSON().slice(0, 10)
   dateSelector.min = "2021-06-19"
   dateGameContainer.append(dateSelector)
 
