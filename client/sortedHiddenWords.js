@@ -1,4 +1,4 @@
-const sortedHiddenWords = [
+const hiddenWords = [
   "aback",
   "abase",
   "abate",
@@ -2310,4 +2310,4 @@ const sortedHiddenWords = [
   "zonal"
 ]
 
-module.exports = sortedHiddenWords
+module.exports = hiddenWords
