@@ -13001,9 +13001,9 @@ const now = new Date(Date.now())
 function getWordFromDate(date, words) {
   const beginning = new Date(2021, 5, 19, 0, 0, 0, 0)
   const diff =
-    (date.setHours("0", "0", "0", "0") -
-      beginning.setHours("0", "0", "0", "0")) /
-    864e5
+    Math.round((date.setHours(0, 0, 0, 0) -
+      beginning.setHours(0, 0, 0, 0)) /
+    864e5)
   return words[diff % words.length]
 }
 
@@ -13011,7 +13011,7 @@ const todaysWord = getWordFromDate(now, words)
 
 module.exports = getWordFromDate
 
-console.log("today's word:", todaysWord)
+// console.log("today's word:", todaysWord)
 
 
 /***/ }),
@@ -15538,6 +15538,7 @@ function toastMessage(message, length) {
   // toastElement.style.animationName = "fadeout"
   toastElement.style.animationDelay = length / 1000 - 0.25 + "s"
   toastElement.style.animationDuration = ".25s"
+  toastElement.style.zIndex = 2
   document.body.append(toastElement)
   if (currentToast) removeToast
   currentToast = toastElement
@@ -15729,7 +15730,7 @@ function processInput(input) {
       }
       toastMessage("CONGRATULATIONS! YOU GUESSED THE WORD!", 1000000000)
       endGame()
-      showGameOptions()
+      showGameOptions(0)
     }
     history.push([hiddenLen, allowedLen, guessWord])
     const colors = convertNumToColors(colorsCode)
@@ -15767,7 +15768,7 @@ function processInput(input) {
       }
       toastMessage(secretWord, 1000000000)
       endGame()
-      showGameOptions()
+      showGameOptions(0)
     }
     return
   }
@@ -15897,7 +15898,7 @@ function unpauseGame() {
 
 let gameOptionsIsShown = false
 
-function showGameOptions() {
+function showGameOptions(delay = 0) {
   const blackElement = document.createElement("div")
   blackElement.style.width = "100vw"
   blackElement.style.height = "100vh"
@@ -15905,7 +15906,7 @@ function showGameOptions() {
   blackElement.style.top = "0px"
   blackElement.style.left = "0px"
   blackElement.style.backgroundColor = "rgba(0, 0, 0, .7)"
-  document.body.append(blackElement)
+
   gameOptionsIsShown = true
   pauseGame()
   const gameOptions = document.createElement("div")
@@ -15997,7 +15998,10 @@ function showGameOptions() {
   playButton.addEventListener("click", onPlay)
   cancelButton.addEventListener("click", onCancel)
   gameOptions.addEventListener("click", onCheckbox)
-  document.body.append(gameOptions)
+  setTimeout(() => {
+    document.body.append(gameOptions)
+    document.body.append(blackElement)
+  }, delay)
 }
 
 hardModeButton.addEventListener("change", (e) => {
