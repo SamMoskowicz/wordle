@@ -503,6 +503,10 @@ function showBestWord() {
   }, 0)
 }
 
+function onBoardClick(e) {
+  displayBoard.focus()
+}
+
 function endGame() {
   if (!isPlaying) return
   isPlaying = false
@@ -510,6 +514,7 @@ function endGame() {
   document.removeEventListener("keydown", processKeyboardInput)
   remainingWordsButton.removeEventListener("click", showSomeRemainingWords)
   hintButton.removeEventListener("click", showBestWord)
+  displayBoard.removeEventListener("click", onBoardClick)
 }
 
 function startGame(mode, date) {
@@ -553,6 +558,7 @@ function startGame(mode, date) {
   document.addEventListener("keydown", processKeyboardInput)
   remainingWordsButton.addEventListener("click", showSomeRemainingWords)
   hintButton.addEventListener("click", showBestWord)
+  displayBoard.addEventListener("click", onBoardClick)
 }
 
 function pauseGame() {
