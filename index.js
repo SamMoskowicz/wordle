@@ -166,6 +166,8 @@ function removeToast() {
 }
 
 function toastMessage(message, length) {
+  if (isPaused) return
+  if (!isPlaying) return
   const toastElement = document.createElement("div")
   toastElement.className = "toast"
   toastElement.innerText = message
@@ -174,7 +176,7 @@ function toastMessage(message, length) {
   toastElement.style.animationDuration = ".25s"
   toastElement.style.zIndex = 2
   document.body.append(toastElement)
-  if (currentToast) removeToast
+  if (currentToast) removeToast()
   currentToast = toastElement
   toastTimeout = setTimeout(() => {
     document.body.removeChild(toastElement)
