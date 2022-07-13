@@ -414,7 +414,6 @@ function processInput(input) {
     currWord.length = 0
     currCol = 0
     if (colorsCode === 121) {
-      console.log("history:", history.slice())
       for (let i = history.length - 1; i > 0; i--) {
         undoUpdate(history[i][0], history[i - 1][0], remainingHidden)
         undoUpdate(history[i][1], history[i - 1][1], remainingAllowed)
@@ -671,7 +670,10 @@ function showGameOptions(delay = 0) {
 }
 
 hardModeButton.addEventListener("change", (e) => {
-  if (isPaused) return
+  if (!isPlaying) {
+    e.target.checked = !e.target.checked
+    return
+  }
   if (guesses) {
     e.target.checked = !e.target.checked
     toastMessage("Can't change difficulty in the middle of a game.", 2000)
@@ -679,7 +681,6 @@ hardModeButton.addEventListener("change", (e) => {
   }
   if (e.target.checked) difficulty = "hard"
   else difficulty = "easy"
-  // console.log("difficulty:", difficulty)
 })
 
 optionsButton.addEventListener("click", () => {
