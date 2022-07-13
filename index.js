@@ -20,6 +20,21 @@ const keyboardLayout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
 const letterToElement = new Array(26)
 
 let loading = false
+let difficulty = "easy"
+let guesses = 0
+let currCol = 0
+let isPlaying = false
+let isPaused = false
+const currWord = []
+const history = []
+let allowedLen = remainingAllowed.length
+let hiddenLen = remainingHidden.length
+let secretWord
+const letterColors = new Array(26).fill("gray")
+const colorPred = { gray: 0, black: 1, yellow: 2, green: 3 }
+const guessedIndicies = new Array(5).fill(false)
+const guessedCount = new Array(26).fill(0)
+const wordNumbers = ["first", "second", "third", "fourth", "fifth"]
 
 for (let i = 0; i < 3; i++) {
   const keyboardRow = document.createElement("div")
@@ -54,6 +69,12 @@ for (let i = 0; i < 3; i++) {
     deleteButton.innerText = "BACK"
     keyboardRow.append(deleteButton)
   }
+}
+
+function isSorted(arr, startIndex = 0, endIndex = arr.length - 1) {
+  for (let i = startIndex + 1; i <= endIndex; i++)
+    if (arr[i] < arr[i - 1]) return false
+  return true
 }
 
 function matchWords(guessWord, secretWord) {
@@ -174,6 +195,10 @@ function letterValue(letter) {
   return letter.toLowerCase().charCodeAt(0) - "a".charCodeAt(0)
 }
 
+function numToLetter(num) {
+  return String.fromCharCode("a".charCodeAt(0) + num)
+}
+
 function isLetter(str) {
   return str.length === 1 && str.match(/[a-z]/)
 }
@@ -184,16 +209,18 @@ function swap(i, j, arr) {
   arr[j] = tmp
 }
 
-function updateWords(len, word, colorsCode, words, updatingAllowed, hard) {
+function updateWords(len, word, colorsCode, words, hard) {
   // console.log("updating word:", word)
   // console.log("word colorsCode:", colorsCode)
   let newLen = 0
   for (let i = 0; i < len; i++) {
-    const currCode = matchWords(word, words[i])
-    if (words[i] === "midst") {
-      // console.log("match words ", word, words[i] + ":", colorsCode)
+    if (hard) {
+      if (wordIsAllowedInHardMode(words[i]).length === 0)
+        swap(i, newLen++, words)
+    } else {
+      const currCode = matchWords(word, words[i])
+      if (currCode === colorsCode) swap(i, newLen++, words)
     }
-    if (currCode === colorsCode) swap(i, newLen++, words)
   }
   return newLen
 }
@@ -296,18 +323,32 @@ function getSomeRemainingWords(n, len, words) {
   return [...set]
 }
 
-let difficulty = "easy"
-let guesses = 0
-let currCol = 0
-let isPlaying = false
-let isPaused = false
-const currWord = []
-const history = []
-let allowedLen = remainingAllowed.length
-let hiddenLen = remainingHidden.length
-let secretWord
-const letterColors = new Array(26).fill("gray")
-const colorPred = { gray: 0, black: 1, yellow: 2, green: 3 }
+function wordIsAllowedInHardMode(word) {
+  const cnt = new Array(26).fill(0)
+  for (let i = 0; i < 5; i++) {
+    if (guessedIndicies[i] && word[i] !== secretWord[i])
+      return (
+        wordNumbers[i] +
+        " letter must be a '" +
+        secretWord[i].toUpperCase() +
+        "'"
+      )
+    cnt[letterValue(word[i])]++
+  }
+  // console.log("guessedCount:", guessedCount.slice())
+  // console.log("cnt:", cnt.slice())
+  for (let i = 0; i < 26; i++) {
+    if (cnt[i] < guessedCount[i])
+      return (
+        "Word must have at least " +
+        guessedCount[i] +
+        " '" +
+        numToLetter(i).toUpperCase() +
+        (guessedCount[i] > 1 ? "'s" : "'")
+      )
+  }
+  return ""
+}
 
 function processInput(input) {
   if (isPaused) return
@@ -319,43 +360,42 @@ function processInput(input) {
     getBoardElement(guesses, currCol).innerText = ""
     return
   }
+  const guessWord = currWord.join("").toLowerCase()
   if (input === "ENTER") {
     if (currCol < 5) return
-    if (!containsWord(currWord.join(""), allowedWords)) {
+    if (!containsWord(guessWord, allowedWords)) {
       // console.log("not in word list")
-      toastMessage("NOT IN WORD LIST", 1500)
+      toastMessage("Not in word list", 1500)
       return
     }
-    if (
-      difficulty === "hard" &&
-      !containsWord(currWord.join(""), remainingAllowed, 0, allowedLen - 1)
-    ) {
-      // console.log("word not allowed in hard mode")
-      toastMessage("WORD DOES NOT MATCH PREVIOUS INPUT", 2500)
-      return
+    if (difficulty === "hard") {
+      const currMessage = wordIsAllowedInHardMode(guessWord)
+      if (currMessage.length) return toastMessage(currMessage, 1500)
     }
-    const guessWord = currWord.join("").toLowerCase()
     const colorsCode = matchWords(guessWord, secretWord)
-    if (colorsCode === 121) {
-      for (let i = history.length - 1; i > 0; i--) {
-        undoUpdate(history[i][0], history[i - 1][0], remainingHidden)
-        undoUpdate(history[i][1], history[i - 1][1], remainingAllowed)
-      }
-      toastMessage("CONGRATULATIONS! YOU GUESSED THE WORD!", 1000000000)
-      endGame()
-      showGameOptions(0)
-    }
-    history.push([hiddenLen, allowedLen, guessWord])
+    history[history.length - 1].push(guessWord)
     const colors = convertNumToColors(colorsCode)
+    const currCnt = new Array(26).fill(0)
+    for (let i = 0; i < 5; i++) {
+      const currLetterValue = letterValue(guessWord[i])
+      if (colors[i] !== "black") {
+        guessedCount[currLetterValue] = Math.max(
+          guessedCount[currLetterValue],
+          ++currCnt[currLetterValue]
+        )
+      }
+      if (colors[i] === "green") guessedIndicies[i] = true
+    }
     hiddenLen = updateWords(hiddenLen, guessWord, colorsCode, remainingHidden)
-    allowedLen = updateWords(
-      allowedLen,
-      guessWord,
-      colorsCode,
-      remainingAllowed
-    )
-    // console.log("remainig hidden words:", hiddenLen)
-    // console.log("remainig allowed words:", allowedLen)
+    if (difficulty === "hard")
+      allowedLen = updateWords(
+        allowedLen,
+        guessWord,
+        colorsCode,
+        remainingAllowed,
+        true
+      )
+    history.push([hiddenLen, allowedLen])
     remainingWords.innerText = "Remainig Words that match: " + hiddenLen
     remainingWordsList.innerHTML = ""
     bestWordContainer.innerHTML = ""
@@ -373,7 +413,17 @@ function processInput(input) {
     guesses++
     currWord.length = 0
     currCol = 0
-    if (colorsCode === 121) return
+    if (colorsCode === 121) {
+      console.log("history:", history.slice())
+      for (let i = history.length - 1; i > 0; i--) {
+        undoUpdate(history[i][0], history[i - 1][0], remainingHidden)
+        undoUpdate(history[i][1], history[i - 1][1], remainingAllowed)
+      }
+      toastMessage("Congratulations! You guessed the word!", 1000000000)
+      endGame()
+      showGameOptions(0)
+      return
+    }
     if (guesses === 6) {
       for (let i = history.length - 1; i > 0; i--) {
         undoUpdate(history[i][0], history[i - 1][0], remainingHidden)
@@ -484,14 +534,17 @@ function startGame(mode, date) {
   // let difficulty = "easy"
   currCol = 0
   currWord.length = 0
-  history.length = 0
   historyIndex = -1
   allowedLen = remainingAllowed.length
   hiddenLen = remainingHidden.length
+  history.length = 0
+  history.push([hiddenLen, allowedLen])
   secretWord =
     mode === "random"
       ? hiddenWords[randInt(0, hiddenWords.length - 1)]
       : getWordFromDate(date, hiddenWords)
+  guessedCount.fill(0)
+  guessedIndicies.fill(false)
 
   remainingWords.innerText = "Remainig words that match: " + hiddenLen
 
@@ -618,6 +671,11 @@ function showGameOptions(delay = 0) {
 }
 
 hardModeButton.addEventListener("change", (e) => {
+  if (guesses) {
+    e.target.checked = !e.target.checked
+    toastMessage("Can't change difficulty in the middle of a game.", 2000)
+    return
+  }
   if (e.target.checked) difficulty = "hard"
   else difficulty = "easy"
   // console.log("difficulty:", difficulty)
