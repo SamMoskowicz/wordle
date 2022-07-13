@@ -671,6 +671,7 @@ function showGameOptions(delay = 0) {
 }
 
 hardModeButton.addEventListener("change", (e) => {
+  if (isPaused) return
   if (guesses) {
     e.target.checked = !e.target.checked
     toastMessage("Can't change difficulty in the middle of a game.", 2000)
