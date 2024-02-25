@@ -15838,8 +15838,9 @@ function processKeyboardInput(e) {
 
 function processVirtualKeyboardInput(e) {
   if (loading) return
-  const input = e.target.innerText
-  processInput(input.toUpperCase())
+  const input = e.target.innerText.toUpperCase()
+  if (input.length > 1 && input !== "BACK" && input != "ENTER") return
+  processInput(input)
 }
 
 function showSomeRemainingWords() {

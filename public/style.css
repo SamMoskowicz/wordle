@@ -13,7 +13,7 @@ nav {
   display: flex;
   /* justify-content: space-around; */
   align-items: center;
-  font-size: 4vh;
+  font-size: min(4vh, 4vw);
   border-bottom: solid whitesmoke 1px;
   width: 99vw;
 }
@@ -40,7 +40,7 @@ nav {
 }
 
 #hard-mode-button-container span {
-  font-size: 3vh;
+  font-size: min(3vh, 3vw);
 }
 
 #options-button {
@@ -62,7 +62,7 @@ nav {
 
 #game-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-start;
   flex-direction: column;
   background-color: #333;
   align-items: center;
@@ -108,7 +108,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: large;
+  font-size: min(3vh, 3vw);
   /* margin: 3px; */
 }
 
@@ -116,6 +116,8 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 10vh;
+  /* padding-bottom: 45px; */
   /* width: 99vw;
   height: 30vh; */
 }
@@ -147,7 +149,7 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: large;
+  font-size: min(3vh, 3vw);
   color: white;
 }
 
@@ -161,6 +163,7 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: min(3vh, 3vw);
 }
 
 .delete-button {
@@ -173,6 +176,7 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: min(3vh, 3vw);
 }
 
 .green {
@@ -221,7 +225,7 @@ nav {
 
 #remaining-words {
   color: white;
-  font-size: large;
+  font-size: min(3vh, 3vw);
   margin-top: 10%;
   width: 90%;
   margin: 10px;
@@ -234,7 +238,7 @@ nav {
   background-color: inherit;
   color: white;
   padding: 5px;
-  font-size: medium;
+  font-size: min(2vh, 2vw);
   border: solid #aaa 1px;
   border-radius: 4px;
   margin: 5px;
@@ -243,14 +247,14 @@ nav {
 
 .remaining-word {
   color: white;
-  font-size: large;
+  font-size: min(3vh, 3vw);
 }
 
 #hint-button {
   background-color: inherit;
   color: white;
   padding: 5px;
-  font-size: medium;
+  font-size: min(2vh, 2vw);
   border: solid #aaa 1px;
   border-radius: 4px;
   margin: 10px;
@@ -258,7 +262,7 @@ nav {
 }
 
 #best-word-container {
-  font-size: x-large;
+  font-size: min(4vh, 4vw);
   color: white;
   display: flex;
   justify-content: center;
