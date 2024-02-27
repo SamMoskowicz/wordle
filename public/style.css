@@ -66,7 +66,8 @@ nav {
   flex-direction: column;
   background-color: #333;
   align-items: center;
-  width: 40%;
+  width: 40vw;
+  height: 35vh;
   /* width: 99vw;
   height: 60vh; */
 }
@@ -74,9 +75,9 @@ nav {
 .side-container {
   display: flex;
   flex-direction: column;
-  width: 30%;
+  width: 30vw;
   align-items: center;
-  height: 50%;
+  height: 35vh;
 }
 
 #board {
